@@ -8,16 +8,16 @@
 
 An interactive Google Colab utility engineered to extract and split massive ZIP files directly within Google Drive. 
 
-By streaming data and actively monitoring Colab's background storage, this script guarantees you will never hit the dreaded **"No space left on device"** error again—even when extracting files well over 100GB!
+By utilizing a direct-to-Drive 2MB memory stream and a brand new **Emergency Deep Clean** system, this script guarantees you will never hit the dreaded **"No space left on device"** or **"Transport endpoint is not connected"** errors again—even when handling uncompressed files well over 100GB!
 
 ---
 
 ## ✨ Key Features
 
-* **🛡️ Disk Guard Self-Healing:** The script actively monitors Colab's hidden local `/tmp` disk usage. If it crosses 70% (or hits a sudden capacity error), the script automatically pauses, force-flushes the drive, unmounts/remounts, and resumes extraction without skipping a beat.
+* **🧹 Emergency Deep Clean (NEW):** Actively monitors Colab's hidden local `/tmp` disk. If usage crosses 70%, the script automatically pauses and wipes apt caches, pip caches, and temporary files to free up space without breaking the Drive connection.
+* **🛡️ Transport-Endpoint Safe (NEW):** Replaced harsh Drive unmounting with soft sync pauses (`time.sleep(20)`). This allows the Google Drive backend buffer to empty naturally, completely fixing the notorious "Transport endpoint is not connected" Colab crash.
 * **🖥️ Live Disk Monitoring:** Keep an eye on Colab's background storage in real-time right from your extraction progress bar.
 * **⏩ Smart Resume (Skip Existing):** If your connection drops or the notebook restarts, just run it again! It checks existing file sizes and automatically skips fully extracted files.
-* **🔓 Zero Local Space Extraction:** Streams uncompressed data directly to your Google Drive using a 1MB memory buffer.
 * **🎮 Bulletproof UI:** Features a cleanly clearing terminal browser, quick Google Drive navigation, and validated input loops so typos won't break your workflow.
 
 ---
@@ -45,13 +45,13 @@ The built-in terminal file browser makes locating your files a breeze. Use these
 
 ## 📥 Example Workflow
 
-1. **Mount:** The script hooks up to your Google Drive.
-2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and type the number for your 120GB `massive_dataset.zip`.
+1. **Mount:** The script hooks up to your Google Drive safely.
+2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and type the number for your 150GB `massive_dataset.zip`.
 3. **Set Destination:** You navigate to your target folder and press `S` to select it.
 4. **Choose Mode:** 
    * Press `1` to **Extract**. 
    * Press `2` to **Split** (cuts the ZIP into manageable chunks).
-5. **Relax:** Watch the beautiful green progress bars. If Colab's background disk gets full, **Disk Guard** will automatically trigger a self-healing flush and keep going. ☕
+5. **Relax:** Watch the beautiful green progress bars. If Colab's background disk gets full, the script will automatically pause, trigger a **Deep Clean**, allow the Drive buffer to sync, and keep going safely. ☕
 
 ---
 
@@ -59,13 +59,13 @@ The built-in terminal file browser makes locating your files a breeze. Use these
 
 | Version | Updates |
 | :---: | :--- |
+| **v1.9** | **Major Stability Update:** Added **Deep Clean** function to wipe local apt/pip/tmp caches when local space hits 70%. Upped chunk buffer to 2MB. |
+| **v1.8** | **Bug Fix:** Resolved the "Transport endpoint is not connected" crash by replacing forced unmounts with soft sync pauses. |
 | **v1.7** | Added **Live Disk Monitoring** directly into the `tqdm` console output. |
 | **v1.6** | Implemented input validation loop for Mode selection to prevent accidental crashes. |
-| **v1.5** | Added the **'Disk Guard' Self-Healing System**. Auto-flushes and remounts Drive if local usage exceeds 70% or catches capacity errors. |
-| **v1.4** | Fixed double-input prompt bug and implemented clean UI terminal clearing via Colab's `output.clear()`. |
-| **v1.3** | Added **'Skip Existing'** logic for pausing/resuming and force flush/sync to guarantee Drive writes. |
-| **v1.2** | Implemented manual stream extraction (1MB buffer) to completely bypass local `/tmp` storage. |
-| **v1.1** | Added byte-level `tqdm` progress bars and emoji-rich interactive UI. |
+| **v1.5** | Added the initial Self-Healing System (Deprecated in v1.8 for safer soft-syncs). |
+| **v1.4** | Fixed double-input prompt bug and implemented clean UI terminal clearing. |
+| **v1.3** | Added **'Skip Existing'** logic for pausing/resuming. |
 
 ---
 

@@ -6,19 +6,17 @@
 [![Google Colab](https://img.shields.io/badge/Google-Colab-F9AB00.svg?logo=googlecolab&logoColor=white)](https://colab.research.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-Are you tired of getting the dreaded **"No space left on device"** error when trying to extract massive (100GB+) ZIP files in Google Colab? 
-
-This interactive Python script solves that problem by **streaming data directly from Drive to Drive**, entirely bypassing Colab's limited local `/tmp` storage. It also includes a built-in file splitter to cut mammoth files into manageable chunks!
+An interactive Google Colab utility designed to extract and split massive ZIP files directly within Google Drive. By completely bypassing local storage limits, this script prevents the dreaded **"No space left on device"** error when handling files larger than 100GB.
 
 ---
 
 ## ✨ Key Features
 
-* **🔓 Direct-to-Drive Extraction:** Uses a 1MB memory buffer to stream uncompressed data directly back to your Google Drive. Zero local disk space required!
+* **🔓 Zero Local Space Extraction:** Streams uncompressed data directly to your Google Drive using a 1MB memory buffer. 
+* **⏩ Smart Resume (Skip Existing):** If your extraction gets interrupted, just run it again! The script checks existing file sizes and automatically skips fully extracted files.
+* **💾 Forced Drive Sync:** Implements `flush()` and `fsync()` to guarantee your data is instantly and safely written to Google Drive, preventing data loss.
 * **🔪 Built-in ZIP Splitter:** Easily chop gigantic ZIP files into custom-sized chunks (defaults to 50GB parts) for easier sharing or storage.
-* **🎮 Interactive Terminal UI:** Browse your Google Drive, select files, and create new folders right from the Colab output cell.
-* **📊 Byte-Level Progress:** Beautiful, color-coded `tqdm` progress bars that track exact byte transfers and uncompressed sizes.
-* **☁️ Auto-Mounting:** Automatically detects and mounts your Google Drive if it isn't already connected.
+* **🎮 Clean Interactive UI:** A built-in terminal browser with auto-clearing screens allows you to navigate Google Drive, select files, and create folders seamlessly.
 
 ---
 
@@ -35,8 +33,8 @@ The script features a custom file browser. Use these keys in the input box:
 
 | Command | Action | Description |
 | :---: | :--- | :--- |
-| **`1`, `2`, `3`...** | **Navigate** | Type the number of a directory to open it. |
-| **`S`** | **✅ Select** | Confirm the current file (or folder) as your target. |
+| **`1`, `2`, `3`...** | **Navigate** | Type the number of a directory or file to interact with it. |
+| **`S`** | **✅ Select** | Confirm the current folder as your destination. |
 | **`B`** | **⬅️ Back** | Move up one folder level. |
 | **`N`** | **🆕 New Folder** | Create a new destination folder on the fly. |
 | **`Q`** | **🛑 Quit** | Safely exit the script. |
@@ -45,13 +43,13 @@ The script features a custom file browser. Use these keys in the input box:
 
 ## 📥 Example Workflow
 
-1. **Mount:** The script hooks up to your Google Drive.
-2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and select your 120GB `massive_dataset.zip`.
+1. **Mount:** The script hooks up to your Google Drive (if not already mounted).
+2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and type the number for your 120GB `massive_dataset.zip`.
 3. **Set Destination:** You navigate to your target folder and press `S` to select it.
 4. **Choose Mode:** 
-   * Press `1` to **Extract** (streams the uncompressed files directly to the destination).
+   * Press `1` to **Extract** (streams uncompressed files to the destination, skipping anything already extracted).
    * Press `2` to **Split** (cuts the ZIP into `part001`, `part002`, etc.).
-5. **Relax:** Watch the green/blue progress bars do the heavy lifting without crashing your Colab instance! ☕
+5. **Relax:** Watch the beautiful green/blue progress bars track exact byte transfers without crashing your Colab instance! ☕
 
 ---
 
@@ -59,7 +57,9 @@ The script features a custom file browser. Use these keys in the input box:
 
 | Version | Updates |
 | :---: | :--- |
-| **v1.2** | Implemented manual stream extraction (1MB buffer) to bypass local storage. Completely prevents 'No space left on device' errors for ZIPs >100GB. |
+| **v1.4** | Fixed double-input prompt bug and implemented clean UI terminal clearing via Colab's `output.clear()`. |
+| **v1.3** | Added **'Skip Existing'** logic for pausing/resuming and force flush/sync to guarantee Drive writes. |
+| **v1.2** | Implemented manual stream extraction (1MB buffer) to completely bypass local `/tmp` storage. |
 | **v1.1** | Added byte-level `tqdm` progress bars and emoji-rich interactive UI. |
 
 ---
@@ -67,11 +67,9 @@ The script features a custom file browser. Use these keys in the input box:
 ## ⚠️ Prerequisites & Dependencies
 
 This script utilizes standard Python libraries pre-installed on Google Colab:
-* `os`
+* `os`, `sys`, `time`, `shutil`
 * `zipfile`
-* `shutil`
-* `time`
-* `tqdm` (for progress bars)
-* `google.colab` (for Drive mounting)
+* `tqdm` (for beautiful progress tracking)
+* `google.colab` (for Drive mounting and clean output clearing)
 
 *Happy extracting! 🏁*

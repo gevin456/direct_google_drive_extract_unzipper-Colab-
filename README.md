@@ -1,23 +1,29 @@
 ![Colab Heavy ZIP Toolkit Banner](https://placehold.co/800x200/222222/00ffaa/png?text=Colab+Heavy+ZIP+Toolkit&font=Montserrat)
 
-# 🗜️ Colab Heavy ZIP Toolkit (Direct-to-Drive)
+# 🗜️ Colab Heavy ZIP Toolkit (Direct Streaming)
 
 [![Python](https://img.shields.io/badge/Python-3.x-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![Google Colab](https://img.shields.io/badge/Google-Colab-F9AB00.svg?logo=googlecolab&logoColor=white)](https://colab.research.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-An interactive Google Colab utility engineered to extract and split massive ZIP files directly within Google Drive. 
+An interactive Google Colab utility engineered to extract and split massive ZIP files directly within Google Drive, utilizing a raw 2MB direct-to-Drive memory stream.
 
-By utilizing a direct-to-Drive 2MB memory stream and a brand new **Emergency Deep Clean** system, this script guarantees you will never hit the dreaded **"No space left on device"** or **"Transport endpoint is not connected"** errors again—even when handling uncompressed files well over 100GB!
+---
+
+> ### ⚠️ **CRITICAL NOTE FOR MASSIVE FILES (>90GB)**
+> Google Colab provides a free local disk resource of roughly 107GB. If your ZIP file is exceptionally large (above 90GB), the Colab instance may eventually run out of background space, causing the program to stop automatically. 
+>
+> **If this happens, do not panic!** 
+> Simply run the script again and **choose the exact same extraction location as before**. The script features a built-in size/hash check. It will safely skip all existing files and continue extracting exactly where you left off. **No damaged files, no corruption.**
 
 ---
 
 ## ✨ Key Features
 
-* **🧹 Emergency Deep Clean (NEW):** Actively monitors Colab's hidden local `/tmp` disk. If usage crosses 70%, the script automatically pauses and wipes apt caches, pip caches, and temporary files to free up space without breaking the Drive connection.
-* **🛡️ Transport-Endpoint Safe (NEW):** Replaced harsh Drive unmounting with soft sync pauses (`time.sleep(20)`). This allows the Google Drive backend buffer to empty naturally, completely fixing the notorious "Transport endpoint is not connected" Colab crash.
+* **⏩ Smart Resume (Skip Logic):** Designed specifically to beat Colab's storage limits. If your extraction stops, re-running the script will instantly verify existing files and resume progress safely.
+* **🔓 Direct Streaming:** Streams uncompressed data directly to your Google Drive using a 2MB memory buffer to minimize local disk footprint.
 * **🖥️ Live Disk Monitoring:** Keep an eye on Colab's background storage in real-time right from your extraction progress bar.
-* **⏩ Smart Resume (Skip Existing):** If your connection drops or the notebook restarts, just run it again! It checks existing file sizes and automatically skips fully extracted files.
+* **🔪 Built-in ZIP Splitter:** Easily chop gigantic ZIP files into custom-sized chunks for easier sharing or storage.
 * **🎮 Bulletproof UI:** Features a cleanly clearing terminal browser, quick Google Drive navigation, and validated input loops so typos won't break your workflow.
 
 ---
@@ -45,13 +51,13 @@ The built-in terminal file browser makes locating your files a breeze. Use these
 
 ## 📥 Example Workflow
 
-1. **Mount:** The script hooks up to your Google Drive safely.
-2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and type the number for your 150GB `massive_dataset.zip`.
+1. **Mount:** The script hooks up to your Google Drive.
+2. **Find ZIP:** The UI prompts you to locate your ZIP file. You navigate to your folder and type the number for your 120GB `massive_dataset.zip`.
 3. **Set Destination:** You navigate to your target folder and press `S` to select it.
 4. **Choose Mode:** 
    * Press `1` to **Extract**. 
    * Press `2` to **Split** (cuts the ZIP into manageable chunks).
-5. **Relax:** Watch the beautiful green progress bars. If Colab's background disk gets full, the script will automatically pause, trigger a **Deep Clean**, allow the Drive buffer to sync, and keep going safely. ☕
+5. **Relax:** Watch the green progress bars. If the script halts due to the 107GB limit, just restart the cell, pick the same folders, and let the **Smart Resume** finish the job! ☕
 
 ---
 
@@ -59,13 +65,11 @@ The built-in terminal file browser makes locating your files a breeze. Use these
 
 | Version | Updates |
 | :---: | :--- |
-| **v1.9** | **Major Stability Update:** Added **Deep Clean** function to wipe local apt/pip/tmp caches when local space hits 70%. Upped chunk buffer to 2MB. |
-| **v1.8** | **Bug Fix:** Resolved the "Transport endpoint is not connected" crash by replacing forced unmounts with soft sync pauses. |
-| **v1.7** | Added **Live Disk Monitoring** directly into the `tqdm` console output. |
-| **v1.6** | Implemented input validation loop for Mode selection to prevent accidental crashes. |
-| **v1.5** | Added the initial Self-Healing System (Deprecated in v1.8 for safer soft-syncs). |
-| **v1.4** | Fixed double-input prompt bug and implemented clean UI terminal clearing. |
-| **v1.3** | Added **'Skip Existing'** logic for pausing/resuming. |
+| **v2.4** | Removed auto-restart/disk guard. Shifted core focus to raw extraction speed and manual resume capability. |
+| **v2.3** | Replaced background cleaning loops with a clean runtime restart prompt. |
+| **v1.7** | Added Live Disk Monitoring directly into the `tqdm` console output. |
+| **v1.3** | Added **'Skip Logic'** for rock-solid pausing/resuming. |
+| **v1.2** | Implemented manual stream extraction to minimize local `/tmp` storage. |
 
 ---
 
